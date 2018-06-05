@@ -23,7 +23,7 @@ install dependencies via npm (npm is installed with node.js)
 
 <b>Path :</b>
 
-``` [POST] /newUser ```
+:heavy_check_mark: ``` [POST] /newUser ```
 <br> => Request for creating new user as format : <br>
 > {
 > "name":"XXX",
@@ -35,7 +35,7 @@ install dependencies via npm (npm is installed with node.js)
 > }
 
 
-``` [POST] /login ``` 
+:heavy_check_mark: ``` [POST] /login ``` 
 <br> => Request for login as format : <br>
 > {
 >   "username":"XXX",
@@ -43,6 +43,12 @@ install dependencies via npm (npm is installed with node.js)
 > }
 
 
-<b>Idea :</b>
+<b>Ideas :</b>
  
- - [ ] Gestion de compte / session 
+- [ ] Gestion de compte / session  
+    - [ ] Gerer les retours la fonction /login
+- [ ] Gestion d'accident / assurance   
+- [ ] Liaison voiture / user  
+- [ ] Location a l'heure  
+- [ ] Tarification determiné par l'user 
+

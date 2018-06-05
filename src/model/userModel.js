@@ -1,13 +1,17 @@
 //Require Mongoose
-const mongoose = require('mongoose')   // mongoDB client
-const bcrypt = require('bcrypt')       // crypter
+const mongoose      = require ("mongoose")   // mongoDB client
+const bcrypt        = require('bcrypt')      // crypter
+
+// const mongoose      = require ("mongoose")   // mongoDB client
+
+// import { mongoose } from 'mongoose'
+// import * as bcrypt from 'bcrypt'       // crypter
 const SALT_WORK_FACTOR = 10            // cryptation degree
 const MAX_LOGIN_ATTEMPTS = 5           // number of try to connect
 const LOCK_TIME = 2 * 60 * 60 * 1000   // Locking Account time
 
 //Define a schema
 const Schema = mongoose.Schema;
-
 
 let userSchema = new Schema({
     name: { type: String, required: true },
@@ -30,8 +34,6 @@ let userSchema = new Schema({
     password :   {
         type: String,
         required: true
-        // match: /(?=.*[a-zA-Z])(?=.*[0-9]+).*/,
-        // minlength: 12
     },
     created_at: Date, 
     updated_at: Date,
@@ -55,19 +57,18 @@ userSchema.pre("save", function (next) {
     if (!user.created_at)
         user.created_at = currentDate;
 
-    console.log("Password : " + this.password)
+    // console.log("Password : " + this.password)
 
     if (!user.isModified('password')) return next();
 
     // generate a salt
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
         if (err) return next(err);
-
+        // console.log(user)
         // hash the password using our new salt
         bcrypt.hash(user.password, salt, function(err, hash) {
             if (err) return next(err);
-            console.log("Hash = "+ hash)
-
+            // console.log("Hash = "+ hash)
             // override the cleartext password with the hashed one
             user.password = hash;
             next();
@@ -164,4 +165,5 @@ userSchema.statics.getAuthenticated = function(username, password, cb) {
     }
 
 // Compile model from schema
+// export default mongoose.model('User', userSchema);
 module.exports = mongoose.model('User', userSchema );
