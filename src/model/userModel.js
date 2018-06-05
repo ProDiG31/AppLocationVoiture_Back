@@ -21,7 +21,10 @@ let userSchema = new Schema({
         unique: true 
     },
     location: String,  
-    admin : Boolean,
+    admin : {
+        type : Boolean, 
+        default : false
+    },
     password :   {
         type: String,
         required: true,
