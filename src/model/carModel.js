@@ -1,5 +1,7 @@
 //  Require Mongoose
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+
+// const User = require('./userModel');
 
 //  Define a schema
 const Schema = mongoose.Schema;
@@ -14,8 +16,14 @@ const carSchema = new Schema({
     required: true,
   },
   location: {
-    type: String,
-    required: true,
+    longitude: {
+      type: Number,
+      required: true,
+    },
+    latitude: {
+      type: Number,
+      required: true,
+    },
   },
   color: String,
   seats: Number,
@@ -39,8 +47,15 @@ const carSchema = new Schema({
 //  politique d'enregistrement en base de donnée
 carSchema.pre('save', (next) => {
   const car = this;
+  // const salt = bcrypt.genSaltSync(10);
+  const currentDate = new Date();
+  // change the updated_at field to current date
+  car.updated_at = currentDate;
+  // if created_at doesn't exist, add to that field
+  if (!car.created_at) car.created_at = currentDate;
 
-  car;
+  //   if (!car.owner) car.owner = User.find({ username });
+
   next();
 });
 

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const User = require('./model/userModel');
+const Car = require('./model/carModel'); 
 
 // Router instance
 const router = express.Router();   
@@ -73,7 +74,28 @@ router.post('/login', function (req, res) {
                 break;
             }
         });
+    }), 
+
+router.post('/newCar', function (req, res) {
+    console.log("[POST] - Creation Car Handle")
+
+    var username = req.body.ownerUsername
+
+    User.findOne({username: username}, function(err, user){
+        if (err) throw err; 
+        console.log("User Found");
+        req.body.owner = user._id;
+        newCar = Car(req.body) 
+
+        //Save new user
+        newCar.save((err) => {
+            if (err) throw err;
+            res.write("Car Created "); 
+            res.end();    
+        });
+
     })
+})
 module.exports = router;
 
 
