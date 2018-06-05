@@ -1,8 +1,10 @@
 
-<b> Projet nodeJs :</b>  App_Location_voiture_back <br>  
+<b> Projet nodeJs :</b>  App_Location_voiture_back <br>
+  
 <b> Groupe de travail : </b> 
 - Ducros Romain 
 - Maria Gregoire 
+- Rachid Medjdoub
 
 <b>Install :</b>
  
@@ -29,7 +31,7 @@ install dependencies via npm (npm is installed with node.js)
 > "username":"XXX",
 > "mail":"XXX@google.com",
 > "location": "XXX",
->	"password":"XXX",
+>	"password":"XXX"
 > }
 
 
@@ -37,15 +39,10 @@ install dependencies via npm (npm is installed with node.js)
 <br> => Request for login as format : <br>
 > {
 >   "username":"XXX",
-> 	"password":"XXX",
+> 	"password":"XXX"
 > }
 
 
 <b>Idea :</b>
  
  - [ ] Gestion de compte / session 
- - [ ] Ajout d'arbre 
- - [ ] filtre de recherche sur la carte 
- - [ ] formulaire d'édition des arbres / comptes 
- - [ ] formulaire de login 
-

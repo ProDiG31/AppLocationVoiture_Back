@@ -1,7 +1,9 @@
 //Require Mongoose
-const mongoose = require('mongoose');   // mongoDB client
-const bcrypt = require('bcrypt');       // crypter
-const SALT_WORK_FACTOR = 10;            // cryptation degree
+const mongoose = require('mongoose')   // mongoDB client
+const bcrypt = require('bcrypt')       // crypter
+const SALT_WORK_FACTOR = 10            // cryptation degree
+const MAX_LOGIN_ATTEMPTS = 5           // number of try to connect
+const LOCK_TIME = 2 * 60 * 60 * 1000   // Locking Account time
 
 //Define a schema
 const Schema = mongoose.Schema;
@@ -27,9 +29,9 @@ let userSchema = new Schema({
     },
     password :   {
         type: String,
-        required: true,
-        match: /(?=.*[a-zA-Z])(?=.*[0-9]+).*/,
-        minlength: 12
+        required: true
+        // match: /(?=.*[a-zA-Z])(?=.*[0-9]+).*/,
+        // minlength: 12
     },
     created_at: Date, 
     updated_at: Date,
@@ -53,6 +55,7 @@ userSchema.pre("save", function (next) {
     if (!user.created_at)
         user.created_at = currentDate;
 
+    console.log("Password : " + this.password)
 
     if (!user.isModified('password')) return next();
 
@@ -81,6 +84,8 @@ var reasons = userSchema.statics.failedLogin = {
 
 // ajout de la methode permettant de comparer les mots de passe.
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
+    console.log ("Candidat = "+ candidatePassword)
+    console.log ("Password to compare = "+ this.password)
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
@@ -104,6 +109,12 @@ userSchema.methods.incLoginAttempts = function(cb) {
     }
     return this.update(updates, cb);
 };
+
+
+userSchema.virtual('isLocked').get(function() {
+    // check for a future lockUntil timestamp
+    return !!(this.lockUntil && this.lockUntil > Date.now());
+});
 
 
 userSchema.statics.getAuthenticated = function(username, password, cb) {
