@@ -1,0 +1,30 @@
+{
+  "name": "app_location_voiture_back",
+  "version": "0.0.1",
+  "description": "Server simulation of application RentDrive",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.10",
+    "mongodb": "^3.0.10",
+    "mongoose": "^5.1.3",
+    "mongoose-store": "^0.2.1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0"
+  }
+}
