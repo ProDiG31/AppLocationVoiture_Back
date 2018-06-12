@@ -34,13 +34,41 @@ install dependencies via npm (npm is installed with node.js)
 >	"password":"XXX"
 > }
 
-
-:heavy_check_mark: ``` [POST] /login ``` 
+:heavy_check_mark:``` [POST] /login ``` 
 <br> => Request for login as format : <br>
 > {
 >   "username":"XXX",
 > 	"password":"XXX"
 > }
+
+:heavy_check_mark:``` [POST] /newCar ``` 
+<br> => Request for creating new car as format linked to user : <br>
+>{
+>	"model": "XXX",
+>	"brand": "XXX",
+>	"location": {
+>		"latitude": X.XXXXXXX,
+>		"longitude": X.XXXXXXX
+>	},
+>	"color": "XXX",
+>	"seats": X,
+>	"motor": "XXX",
+>	"consuming": "X.X",
+>	"gearbox": "XXX",
+>	"counter": XXXXX,
+>	"doorNumber": X,
+>	"type": "XXX",
+>	"feature": [
+>		"XXX",
+>		"XXX",
+>		"XXX"
+>	],
+>	"comment": "XXX",
+>	"manufactureYear": AAAA,
+>	"owner": "XXX"
+>}
+
+##### owner dans le JSON est le username de l'utilisateur,lors de la sauvegarde en BDD cette valeur seras remplacer par l'objectId de cette utilisateur 
 
 
 <b>Ideas :</b>
