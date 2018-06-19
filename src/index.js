@@ -1,10 +1,17 @@
 // Module import by npm
 const express = require('express');
 const fs = require('fs');
-const _ = require('lodash');
+// const _ = require('lodash');
 const bodyParser = require('body-parser');
-const path = require('path');
+// const path = require('path');
 const cors = require('cors');
+
+const authRouter = require('./routes/auth');
+const carRouter = require('./routes/car');
+const userRouter = require('./routes/user');
+
+// Connection a la base de donnée
+const { connect } = require('./services/dbService');
 
 // Module instance
 const app = express();
@@ -13,10 +20,13 @@ const server = require('http').createServer(app);
 // Router instance
 const router = express.Router();
 
-// Custom module in ./app/
-const mongoDb = require('./db.js');
+// init db connection
+connect();
 
+// const mongoDb = require('./db.js');
 router.use(bodyParser.json());
+
+// enable cross plateform protocol communication
 router.use(cors(process.env.ORIGIN, { withCredentials: true }));
 
 // a middleware function with no mount path. This code is executed for every request to the router
@@ -26,8 +36,10 @@ router.use((req, res, next) => {
   next();
 });
 
-// Routage des actions de base de donnée sur le module dbmysql
-router.use('/db', mongoDb);
+// redirection des actions vers les routeurs concernées
+router.use('/auth', authRouter);
+router.use('/', userRouter);
+router.use('/', carRouter);
 
 // path de redirection par defautl
 router.get('/', (req, res) => {
