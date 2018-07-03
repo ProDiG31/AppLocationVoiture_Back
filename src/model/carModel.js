@@ -24,6 +24,10 @@ const carSchema = new Schema({
       type: Number,
       required: true,
     },
+    string: {
+      type: String,
+      required: true,
+    },
   },
   color: String,
   seats: Number,
