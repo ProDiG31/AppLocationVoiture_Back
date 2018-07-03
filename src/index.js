@@ -32,7 +32,12 @@ router.use(cors(process.env.ORIGIN, { withCredentials: true }));
 // a middleware function with no mount path. This code is executed for every request to the router
 router.use((req, res, next) => {
   const date = new Date();
-  console.log(`[Time]: ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - [Method]: ${req.method} [URL]: ${req.url}`);
+  console.log(`[Time]: ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} - [Method]: ${req.method} [URL]: ${req.url} - [Mode]: ${req}`);
+  // console.log(req);
+
+  // enable cross plateform protocol communication
+  // res.header('Access-Control-Allow-Origin', '*');
+  // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 

@@ -3,8 +3,8 @@ const mongoose = require('mongoose'); // mongoDB client
 const bcrypt = require('bcrypt'); // crypter
 
 const SALT_WORK_FACTOR = 10; // cryptation degree
-const MAX_LOGIN_ATTEMPTS = 5; // number of try to connect
-const LOCK_TIME = 2 * 60 * 60 * 1000; // Locking Account time
+// const MAX_LOGIN_ATTEMPTS = 5; // number of try to connect
+// const LOCK_TIME = 2 * 60 * 60 * 1000; // Locking Account time
 
 // Define a schema
 const Schema = mongoose.Schema;
@@ -70,92 +70,28 @@ userSchema.pre('save', (next) => {
   });
 });
 
-// expose enum on the model, and provide an internal convenience reference
-const reasons = userSchema.statics.failedLogin = {
-  NOT_FOUND: 0,
-  PASSWORD_INCORRECT: 1,
-  MAX_ATTEMPTS: 2,
-};
-
 // ajout de la methode permettant de comparer les mots de passe.
-userSchema.methods.comparePassword = function (candidatePassword, cb) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   console.log(`Candidat = ${candidatePassword}`);
   console.log(`Password to compare = ${this.password}`);
-  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    if (err) return cb(err);
-    cb(null, isMatch);
-  });
+  bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.statics.getAuthenticated = async function (username, password) {
+  const user = await this.findOne({ username });
+  if (!user) return null;
 
-userSchema.methods.incLoginAttempts = function (cb) {
-  // if we have a previous lock that has expired, restart at 1
-  if (this.lockUntil && this.lockUntil < Date.now()) {
-    return this.update({
-      $set: { loginAttempts: 1 },
-      $unset: { lockUntil: 1 },
-    }, cb);
-  }
-  // otherwise we're incrementing
-  const updates = { $inc: { loginAttempts: 1 } };
-  // lock the account if we've reached max attempts and it's not locked already
-  if (this.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
-    updates.$set = { lockUntil: Date.now() + LOCK_TIME };
-  }
-  return this.update(updates, cb);
+  const isSame = await bcrypt.compare(password, user.password);
+  if (!isSame) return null;
+
+  return user;
 };
 
-
-userSchema.virtual('isLocked').get(function () {
-  // check for a future lockUntil timestamp
-  return !!(this.lockUntil && this.lockUntil > Date.now());
-});
-
-
-userSchema.statics.getAuthenticated = function (username, password, cb) {
-  this.findOne({ username }, (err, user) => {
-    if (err) return cb(err);
-
-    // make sure the user exists
-    if (!user) {
-      return cb(null, null, reasons.NOT_FOUND);
-    }
-
-    // check if the account is currently locked
-    if (user.isLocked) {
-      // just increment login attempts if account is already locked
-      return user.incLoginAttempts((err) => {
-        if (err) return cb(err);
-        return cb(null, null, reasons.MAX_ATTEMPTS);
-      });
-    }
-
-    // test for a matching password
-    user.comparePassword(password, (errCompare, isMatch) => {
-      if (errCompare) return cb(errCompare);
-
-      // check if the password was a match
-      if (isMatch) {
-        // if there's no lock or failed attempts, just return the user
-        if (!user.loginAttempts && !user.lockUntil) return cb(null, user);
-        // reset attempts and lock info
-        const updates = {
-          $set: { loginAttempts: 0 },
-          $unset: { lockUntil: 1 },
-        };
-        return user.update(updates, (errUpdate) => {
-          if (errUpdate) return cb(errUpdate);
-          return cb(null, user);
-        });
-      }
-
-      // password is incorrect, so increment login attempts before responding
-      user.incLoginAttempts((errLogin) => {
-        if (errLogin) return cb(errLogin);
-        return cb(null, null, reasons.PASSWORD_INCORRECT);
-      });
-    });
-  });
+userSchema.statics.getAllUsers = async function () {
+  const userlist = await this.find();
+  if (!userlist) return null;
+  console.log(userlist);
+  return userlist;
 };
 
 // Compile model from schema

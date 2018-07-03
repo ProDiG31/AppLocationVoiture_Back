@@ -23,7 +23,7 @@ install dependencies via npm (npm is installed with node.js)
 
 <b>Path :</b>
 
-:heavy_check_mark: ``` [POST] /newUser ```
+:heavy_check_mark: ``` [POST] /user/new ```
 <br> => Request for creating new user as format : <br>
 > {
 > "name":"XXX",
@@ -34,6 +34,12 @@ install dependencies via npm (npm is installed with node.js)
 >	"password":"XXX"
 > }
 
+:heavy_check_mark: ``` [GET] /users/```
+<br> => Request for get all users from DB : <br>
+
+:heavy_check_mark: ``` [GET] /user/:username ```
+<br> => Request for an user by his username : <br>
+
 :heavy_check_mark:``` [POST] /login ``` 
 <br> => Request for login as format : <br>
 > {
@@ -41,7 +47,7 @@ install dependencies via npm (npm is installed with node.js)
 > 	"password":"XXX"
 > }
 
-:heavy_check_mark:``` [POST] /newCar ``` 
+:heavy_check_mark:``` [POST] /Car/new ``` 
 <br> => Request for creating new car as format linked to user : <br>
 >{
 >	"model": "XXX",
@@ -70,11 +76,12 @@ install dependencies via npm (npm is installed with node.js)
 
 ##### owner dans le JSON est le username de l'utilisateur,lors de la sauvegarde en BDD cette valeur seras remplacer par l'objectId de cette utilisateur 
 
+:heavy_check_mark: ```/car/:id```
 
 <b>Ideas :</b>
  
 - [ ] Gestion de compte / session  
-    - [ ] Gerer les retours la fonction /login
+- [ ] Gerer les retours la fonction /login
 - [ ] Gestion d'accident / assurance   
 - [ ] Liaison voiture / user  
 - [ ] Location a l'heure  

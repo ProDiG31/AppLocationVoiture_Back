@@ -3,10 +3,7 @@ const { Router } = require('express');
 const carRouter = Router();
 const Models = require('../model/index');
 
-// Load database Connection
-require('../services/dbService');
-
-carRouter.post('/newCar', (req, res) => {
+carRouter.post('/Car/new', (req, res) => {
   console.log('[POST] - Creation Car Handle');
 
   Models.User.findOne({ username: req.body.owner }, (err, user) => {

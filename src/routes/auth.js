@@ -1,53 +1,36 @@
 const { Router } = require('express');
 
 const authRouter = Router();
-const Models = require('../model/index');
+const Models = require('../model');
 
-// Load database Connection
-require('../services/dbService');
+authRouter.post('/login', async (req, res) => {
+  const { body: { username, password } } = req;
+  console.log(username, password);
 
-authRouter.post('/login', (req, res) => {
-  console.log('[POST] - Login Request Handle');
-  //   console.log(JSON.stringify(req));
+  const user = await Models.User.getAuthenticated(username, password);
+  console.log(user);
 
-  const username = req.body.username;
-  const password = req.body.password;
+  if (!user) {
+    res.status(401);
+    res.json({
+      msg: 'Error',
+    });
+    res.end();
+  }
 
-  // attempt to authenticate user
-  Models.User.getAuthenticated(username, password, (err, user, reason) => {
-    if (err) throw err;
+  const responseJson = {
+    id: user.id,
+    username: user.username,
+    firstName: user.firstname,
+    lastName: user.name,
+    token: 'fake-jwt-token',
+  };
 
-    // login was successful if we have a user
-    if (user) {
-    // handle login success
-      console.log('login success');
-      res.write('Login OK');
-      res.end();
-    }
+  console.log(responseJson);
 
-    // otherwise we can determine why we failed
-    const reasons = Models.User.failedLogin;
-    switch (reason) {
-      case reasons.NOT_FOUND:
-        console.log('Login Error Not found');
-        res.write('Login Error Not found');
-        res.end();
-        break;
-      case reasons.PASSWORD_INCORRECT:
-        console.log('password false');
-        res.write('password false');
-        res.end();
-        break;
-      case reasons.MAX_ATTEMPTS:
-        console.log('Max try attemps');
-        res.write('Max try attemps');
-        res.end();
-        break;
-      default:
-        break;
-    }
-  });
+  res.status(200);
+  res.json({ ok: true, user: responseJson });
+  res.end();
 });
-
 
 module.exports = authRouter;
