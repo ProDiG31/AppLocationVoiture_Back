@@ -99,7 +99,7 @@ install dependencies via npm (npm is installed with node.js)
 :heavy_check_mark:``` [GET] /rents/:carId ``` 
 <br> => Request for get all of car linked by id : <br>
 
-<b>Ideas :</b>
+<h1>Ideas :</h1>
  
 - [ ] Gestion de compte / session  
 - [ ] Gerer les retours la fonction /login
